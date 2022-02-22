@@ -1,8 +1,6 @@
 from ravenpackapi import RPApi, Dataset
 
-# Select either RPA or EDGE product
-product = "rpa"
-product = "edge"
+product = "rpa"  # or "edge"
 
 # Product specific fields:
 if product == "rpa":
@@ -30,7 +28,6 @@ fields = [
     "country_code",
     ENTITY_RELEVANCE,
     ENTITY_SENTIMENT,
-    "entity_sentiment",
     EVENT_SENTIMENT,
     "topic",
     "group",
@@ -45,7 +42,6 @@ ds = api.create_dataset(
             "product": product,
             "product_version": "1.0",
             "name": "Events in UK - example",
-            "frequency": "granular",
             "fields": fields,
             "filters": {
                 "$and": [
@@ -68,6 +64,7 @@ ds = api.create_dataset(
                     }
                 ]
             },
+            "frequency": "granular",
         }
     )
 )

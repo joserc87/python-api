@@ -15,7 +15,7 @@ else:
 
 
 # initialize the API (here we use the RP_API_KEY in os.environ)
-api = RPApi()
+api = RPApi(product=product)
 
 # get the us30 dataset (its filters contain the top 30 US companies)
 us30 = Dataset(api=api, id=us30_id)
