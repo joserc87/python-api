@@ -7,13 +7,13 @@ product = "edge"
 # Product specific fields:
 if product == "rpa":
     RP_STORY_ID = "rp_story_id"
-    RELEVANCE = "relevance"
+    ENTITY_RELEVANCE = "relevance"
     EVENT_SENTIMENT = "event_sentiment_score"
     TITLE = "headline"
     ENTITY_SENTIMENT = None  # field does not exist in RPA
 else:
     RP_STORY_ID = "rp_document_id"
-    RELEVANCE = "event_relevance"
+    ENTITY_RELEVANCE = "entity_relevance"
     EVENT_SENTIMENT = "event_sentiment"
     TITLE = "title"
     ENTITY_SENTIMENT = "entity_sentiment"
@@ -28,7 +28,7 @@ fields = [
     "entity_type",
     "entity_name",
     "country_code",
-    RELEVANCE,
+    ENTITY_RELEVANCE,
     ENTITY_SENTIMENT,
     "entity_sentiment",
     EVENT_SENTIMENT,
@@ -50,7 +50,7 @@ ds = api.create_dataset(
             "filters": {
                 "$and": [
                     {
-                        RELEVANCE: {
+                        ENTITY_RELEVANCE: {
                             "$gte": 90
                         }
                     },
