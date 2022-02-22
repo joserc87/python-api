@@ -1,30 +1,56 @@
 from ravenpackapi import RPApi, Dataset
 
-api = RPApi()
+# Select either RPA or EDGE product
+product = "rpa"
+product = "edge"
+
+# Product specific fields:
+if product == "rpa":
+    RP_STORY_ID = "rp_story_id"
+    RELEVANCE = "relevance"
+    EVENT_SENTIMENT = "event_sentiment_score"
+    TITLE = "headline"
+    ENTITY_SENTIMENT = None  # field does not exist in RPA
+else:
+    RP_STORY_ID = "rp_document_id"
+    RELEVANCE = "event_relevance"
+    EVENT_SENTIMENT = "event_sentiment"
+    TITLE = "title"
+    ENTITY_SENTIMENT = "entity_sentiment"
+
+
+api = RPApi(api_key="YOUR_API_KEY", product=product)
+
+fields = [
+    "timestamp_utc",
+    RP_STORY_ID,
+    "rp_entity_id",
+    "entity_type",
+    "entity_name",
+    "country_code",
+    RELEVANCE,
+    ENTITY_SENTIMENT,
+    "entity_sentiment",
+    EVENT_SENTIMENT,
+    "topic",
+    "group",
+    TITLE,
+]
+# Note that edge has some extra fields
+fields = [f for f in fields if f]
 
 ds = api.create_dataset(
     Dataset(
         **{
-            "product": "rpa",
+            "product": product,
             "product_version": "1.0",
             "name": "Events in UK - example",
-            "fields": [
-                "timestamp_utc",
-                "rp_story_id",
-                "rp_entity_id",
-                "entity_type",
-                "entity_name",
-                "country_code",
-                "relevance",
-                "event_sentiment_score",
-                "topic",
-                "group",
-                "headline"
-            ],
+            "frequency": "granular",
+            "fields": fields,
             "filters": {
                 "$and": [
                     {
-                        "relevance": {
+                        RELEVANCE: {
                             "$gte": 90
                         }
                     },
@@ -36,13 +62,12 @@ ds = api.create_dataset(
                         }
                     },
                     {
-                        "event_sentiment_score": {
+                        EVENT_SENTIMENT: {
                             "$nbetween": [-0.5, 0.5]
                         }
                     }
                 ]
             },
-            "frequency": "granular",
         }
     )
 )
