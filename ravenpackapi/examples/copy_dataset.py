@@ -2,11 +2,23 @@ from ravenpackapi import RPApi, Dataset
 import logging
 
 logging.basicConfig(level=logging.INFO)
+
+product = "rpa"  # or "edge"
+
+# There are a few differences between RPA and EDGE:
+if product == "rpa":
+    us30_id = "us30"
+    EVENT_SENTIMENT_SCORE = "EVENT_SENTIMENT_SCORE"
+else:
+    us30_id = "us30-edge"
+    EVENT_SENTIMENT_SCORE = "EVENT_SENTIMENT"
+
+
 # initialize the API (here we use the RP_API_KEY in os.environ)
 api = RPApi()
 
 # get the us30 dataset (its filters contain the top 30 US companies)
-us30 = Dataset(api=api, id='us30')
+us30 = Dataset(api=api, id=us30_id)
 
 print(us30.filters)
 
@@ -28,7 +40,7 @@ new_fields = [
     {
         "daily_average_ess_1d": {
             "avg": {
-                "field": "EVENT_SENTIMENT_SCORE",
+                "field": EVENT_SENTIMENT_SCORE,
                 "lookback": 1,
                 "mode": "daily"
             }
@@ -37,7 +49,7 @@ new_fields = [
     {
         "daily_average_ess_90d": {
             "avg": {
-                "field": "EVENT_SENTIMENT_SCORE",
+                "field": EVENT_SENTIMENT_SCORE,
                 "lookback": 90,
                 "mode": "daily"
             }
